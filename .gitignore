@@ -16,6 +16,17 @@ migrate_working_dir/
 *.iws
 .idea/
 
+# Android Studio
+*.iml
+.gradle/
+local.properties
+.settings/
+.classpath
+.project
+.projectSettings/
+build/
+out/
+
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
@@ -37,6 +48,39 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/.gradle/
+/android/.gradle/
+/android/app/build/
+/android/build/
+
+# iOS related
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/xcuserdata
+**/ios/.generated/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
 
 # Python
 __pycache__/
@@ -47,11 +91,72 @@ __pycache__/
 env/
 venv/
 ENV/
-.venv
+.venv/
 
-
-# API Keys (if you add them to separate files)
+# API Keys and Sensitive Data (CRITICAL - NEVER COMMIT)
 *.key
 *.env
+*.pem
+*.p12
 lib/config/api_config.dart
+**/local.properties
 
+# Web related
+/web/*.js
+/web/*.js.map
+/web/.dart_tool/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+**/macos/.symlinks/
+**/macos/Flutter/ephemeral
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Coverage
+coverage/
+*.coverage
+*.lcov
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Generated files
+*.generated.*
+.generated/
+
+# Build outputs
+build/
+dist/
+out/
+*.apk
+*.aab
+*.ipa
+*.app
+
+# Cleanup scripts output
+cleanup_output/

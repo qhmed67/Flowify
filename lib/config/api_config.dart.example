@@ -1,0 +1,31 @@
+class ApiConfig {
+  // OpenRouter API Configuration
+  // Get your API key from: https://openrouter.ai/keys
+
+  // ⚠️ SECURITY WARNING: This API key is hardcoded and exposed in source code.
+  // For production use, consider using environment variables or secure key storage.
+  // DO NOT commit real API keys to version control systems.
+
+  // Copy this file to api_config.dart and replace with your actual API key
+  static const String openRouterApiKey = 'YOUR_OPENROUTER_API_KEY_HERE';
+
+  static const String openRouterApiUrl =
+      'https://openrouter.ai/api/v1/chat/completions';
+
+  // Model to use
+  // Options:
+  // - "deepseek/deepseek-chat" (FREE, recommended)
+  // - "deepseek/deepseek-r1:free" (FREE, but rate-limited)
+  // - "google/gemini-flash-1.5" (FREE alternative)
+  // - "deepseek/deepseek-r1" (Paid, more powerful)
+
+  // IMPORTANT [EVERY MODEL HAS IT'S OWN ANALYZING AND THINKING WAY]
+  static const String model = 'deepseek/deepseek-r1:free';
+
+  // Request timeout in seconds (3 minutes for complex flowcharts)
+  static const int requestTimeout = 180;
+
+  // Max tokens in response (reduced to fit within credit limits
+  // on average was 400-900 tokens)
+  static const int maxTokens = 1000; // Adjusted for credit availability
+}
