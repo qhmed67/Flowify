@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      overflow-x: auto;
+    }
+    #chart {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      min-height: 400px;
+      overflow-x: auto;
+    }
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.min.js" 
+          onload="console.log('Mermaid script loaded');" 
+          onerror="console.error('Failed to load Mermaid script');"></script>
+  <script>
+    let mermaidReady = false;
+    let mermaidConfig = {
+      startOnLoad: false,
+      theme: 'default',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      },
+      securityLevel: 'loose'
+    };
+
+    // Wait for Mermaid to load with better error handling
+    let initAttempts = 0;
+    const maxInitAttempts = 20; // Try for up to 4 seconds
+
+    function initMermaid() {
+      initAttempts++;
+      if (typeof mermaid !== 'undefined' && typeof mermaid.initialize === 'function') {
+        try {
+          // Suppress promise rejection warnings
+          if (typeof window.addEventListener === 'function') {
+            window.addEventListener('unhandledrejection', function(event) {
+              console.warn('Unhandled promise rejection (suppressed):', event.reason);
+              event.preventDefault();
+            });
+          }
+
+          mermaid.initialize(mermaidConfig);
+          mermaidReady = true;
+          console.log('Mermaid initialized successfully');
+          return true;
+        } catch (error) {
+          console.error('Error initializing Mermaid:', error);
+          if (initAttempts >= maxInitAttempts) {
+            document.getElementById('chart').innerHTML = 
+              '<p style="color: red;">Error initializing Mermaid: ' + error.message + '</p>';
+          }
+          return false;
+        }
+      } else {
+        if (initAttempts < maxInitAttempts) {
+          console.log('Waiting for Mermaid to load... (' + initAttempts + '/' + maxInitAttempts + ')');
+          setTimeout(initMermaid, 200);
+        } else {
+          document.getElementById('chart').innerHTML = 
+            '<p style="color: red;">Mermaid.js failed to load. Please check your internet connection.</p>';
+        }
+        return false;
+      }
+    }
+
+    // Handle script load events
+    function onScriptLoad() {
+      console.log('Mermaid script loaded, initializing...');
+      setTimeout(initMermaid, 100);
+    }
+
+    function onScriptError() {
+      console.error('Failed to load Mermaid.js from CDN');
+      document.getElementById('chart').innerHTML = 
+        '<p style="color: red;">Failed to load Mermaid.js. Please check your internet connection.</p>';
+    }
+
+    // Start initialization when script loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(initMermaid, 300);
+      });
+    } else {
+      setTimeout(initMermaid, 300);
+    }
+
+    // Also try after delays to ensure script is loaded
+    setTimeout(initMermaid, 500);
+    setTimeout(initMermaid, 1000);
+
+    function tryFallbackRender(chartDiv, code) {
+      // This function is no longer used but kept for compatibility
+      tryContentLoaded(chartDiv, code, null);
+    }
+
+    function tryContentLoaded(chartDiv, code, previousError) {
+      try {
+        // Last resort: use contentLoaded (works with older Mermaid versions)
+        if (typeof mermaid.contentLoaded === 'function') {
+          // Remove existing content and create fresh
+          chartDiv.innerHTML = '';
+          const newDiv = document.createElement('div');
+          newDiv.className = 'mermaid';
+          newDiv.textContent = code;
+          chartDiv.appendChild(newDiv);
+          
+          console.log('Using mermaid.contentLoaded');
+          mermaid.contentLoaded();
+          
+          // Check if it rendered after a delay
+          setTimeout(function() {
+            const renderedContent = newDiv.innerHTML.trim();
+            const originalCode = code.trim();
+            // If content changed, it likely rendered
+            if (renderedContent && renderedContent !== originalCode && renderedContent.length > originalCode.length) {
+              console.log('Flowchart rendered with contentLoaded');
+            } else {
+              console.warn('contentLoaded may not have rendered properly');
+              // Give it more time
+              setTimeout(function() {
+                if (newDiv.innerHTML.trim() === originalCode || newDiv.innerHTML.trim() === '') {
+                  showError(chartDiv, previousError || new Error('contentLoaded did not render'), code);
+                }
+              }, 2000);
+            }
+          }, 1500);
+        } else {
+          // Just show the code as text
+          showError(chartDiv, previousError || new Error('Mermaid API not available'), code);
+        }
+      } catch (error) {
+        console.error('Error in tryContentLoaded:', error);
+        showError(chartDiv, previousError || error, code);
+      }
+    }
+
+    function showError(chartDiv, error, code) {
+      chartDiv.innerHTML = 
+        '<p style="color: red;">Error rendering flowchart: ' + error.message + '</p>' +
+        '<details style="margin-top: 10px;"><summary>Show code</summary>' +
+        '<pre style="background: #f5f5f5; padding: 10px; margin-top: 10px; overflow-x: auto; white-space: pre-wrap;">' + 
+        escapeHtml(code) + '</pre></details>';
+    }
+
+    function updateChart(mermaidCode) {
+      if (!mermaidReady) {
+        console.log('Mermaid not ready, waiting...');
+        setTimeout(function() {
+          updateChart(mermaidCode);
+        }, 200);
+        return;
+      }
+
+      try {
+        const chartDiv = document.getElementById('chart');
+        chartDiv.innerHTML = '';
+        
+        // Extract mermaid code from markdown code block if present
+        let code = mermaidCode.trim();
+        if (code.startsWith('```mermaid')) {
+          code = code.replace(/```mermaid\s*\n?/g, '').replace(/```\s*\n?$/g, '').trim();
+        } else if (code.startsWith('```')) {
+          code = code.replace(/```\s*\n?/g, '').trim();
+        }
+        
+        // Validate that we have mermaid code
+        if (!code || code.length === 0) {
+          chartDiv.innerHTML = '<p style="color: orange;">No flowchart code found in response.</p>';
+          return;
+        }
+
+        if (!code.includes('flowchart') && !code.includes('graph')) {
+          chartDiv.innerHTML = '<p style="color: orange;">Invalid flowchart syntax. Expected flowchart or graph.</p>';
+          return;
+        }
+
+        // Fix formatting - ensure proper newlines for Mermaid
+        // Replace spaces between nodes with newlines
+        code = code.replace(/\s+-->/g, '\n    -->');
+        // Ensure nodes are on separate lines
+        code = code.replace(/([A-Z]\([^)]+\)|\{[^}]+\}|\[[^\]]+\])\s+([A-Z]|\{)/g, '$1\n    $2');
+        // Clean up multiple spaces
+        code = code.replace(/\s{2,}/g, ' ');
+        // Ensure flowchart declaration is on first line
+        if (!code.match(/^(flowchart|graph)\s+(TD|LR|TB|RL)/)) {
+          code = code.replace(/^(flowchart|graph)\s*/, 'flowchart TD\n    ');
+        } else {
+          code = code.replace(/^(flowchart|graph)\s+/, '$1 ');
+        }
+        // Clean up extra newlines
+        code = code.replace(/\n{3,}/g, '\n\n').trim();
+        
+        // Create new mermaid div with unique ID
+        chartDiv.innerHTML = '';
+        const mermaidDiv = document.createElement('div');
+        const uniqueId = 'mermaid-' + Date.now();
+        mermaidDiv.id = uniqueId;
+        mermaidDiv.className = 'mermaid';
+        // Set text content with proper formatting
+        mermaidDiv.textContent = code;
+        chartDiv.appendChild(mermaidDiv);
+        
+        console.log('Mermaid code to render:', code);
+        
+        // Render using mermaid.render (most reliable for v9)
+        try {
+          if (typeof mermaid.render === 'function') {
+            console.log('Using mermaid.render API');
+            mermaid.render(uniqueId, code)
+              .then(function(result) {
+                console.log('Render result:', result);
+                if (result && result.svg) {
+                  // Replace the div with rendered SVG
+                  mermaidDiv.outerHTML = '<div class="mermaid-rendered">' + result.svg + '</div>';
+                  console.log('Flowchart rendered successfully with mermaid.render');
+                } else {
+                  throw new Error('Invalid render result');
+                }
+              })
+              .catch(function(error) {
+                console.error('Error with mermaid.render:', error);
+                // Try contentLoaded as fallback
+                tryContentLoaded(chartDiv, code, error);
+              });
+          } else {
+            // Fallback to contentLoaded
+            console.log('mermaid.render not available, using contentLoaded');
+            tryContentLoaded(chartDiv, code, null);
+          }
+        } catch (error) {
+          console.error('Error in rendering:', error);
+          tryContentLoaded(chartDiv, code, error);
+        }
+      } catch (error) {
+        console.error('Error in updateChart:', error);
+        const chartDiv = document.getElementById('chart');
+        if (chartDiv) {
+          chartDiv.innerHTML = 
+            '<p style="color: red;">Error: ' + error.message + '</p>';
+        }
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Listen for messages from Flutter
+    window.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'updateChart') {
+        updateChart(event.data.mermaidCode);
+      }
+    });
+
+    // Expose updateChart globally for direct calls from Flutter
+    window.updateChart = updateChart;
+  </script>
+</head>
+<body>
+  <div id="chart" class="mermaid">
+    <p>Waiting for flowchart data...</p>
+  </div>
+</body>
+</html>
+
