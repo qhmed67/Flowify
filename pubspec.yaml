@@ -1,5 +1,5 @@
-name: flowchart_designer
-description: A Flutter app for generating flowcharts using DeepSeek R1 AI and Mermaid.js
+name: flowify
+description: AI-powered Flutter app for generating flowcharts using DeepSeek R1 AI
 publish_to: 'none'
 version: 1.0.0+1
 

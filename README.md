@@ -16,7 +16,7 @@
 
 ## 🚀 Overview
 
-**Flowify** is a powerful, standalone Flutter application that leverages **DeepSeek R1 AI** (via OpenRouter) to generate professional flowcharts from natural language descriptions, code snippets, or programming problems. With native Flutter rendering and intelligent layout algorithms, Flowify delivers crisp, interactive diagrams without any WebView dependencies.
+**Flowify** is a powerful, mobile-first Flutter application that leverages **DeepSeek R1 AI** (via OpenRouter) to generate professional flowcharts from natural language descriptions, code snippets, or programming problems. With native Flutter rendering and intelligent layout algorithms, Flowify delivers crisp, interactive diagrams optimized for Android and iOS devices.
 
 ### 💡 Key Features
 
@@ -34,7 +34,7 @@
   - Multiple data types (input, output, process, decision, merge)
 - **🎯 Beautiful UI**: Modern Material Design 3 interface with animated loading screens and intuitive controls
 - **🔒 Secure**: Standalone architecture - no backend server required, communicates directly with OpenRouter API
-- **📱 Cross-Platform**: Runs on Android, iOS, Web, Windows, macOS, and Linux
+- **📱 Mobile-First**: Optimized for Android and iOS devices
 
 ---
 
@@ -60,11 +60,7 @@ Flowify/
 │   └── main.dart                    # App entry point and UI
 ├── android/                         # Android platform configuration
 ├── ios/                             # iOS platform configuration
-├── web/                             # Web platform configuration
-├── windows/                         # Windows platform configuration
-├── macos/                           # macOS platform configuration
-├── linux/                           # Linux platform configuration
-├── assets/                          # Static assets (HTML templates, etc.)
+├── assets/                          # Static assets
 ├── pubspec.yaml                     # Flutter dependencies
 └── README.md                        # This file
 ```
@@ -186,13 +182,15 @@ Flowify/
 
 4. **Run the app:**
    ```bash
-   # For Android/iOS
+   # For Android (requires connected device/emulator)
    flutter run
    
-   # For specific platform
-   flutter run -d chrome        # Web
-   flutter run -d windows       # Windows
-   flutter run -d macos         # macOS
+   # For iOS (requires macOS and Xcode)
+   flutter run
+   
+   # Specify device
+   flutter devices                    # List available devices
+   flutter run -d <device_id>        # Run on specific device
    ```
 
 ---
@@ -318,12 +316,10 @@ flutter test --coverage
 
 | Platform | Status | Notes |
 |----------|--------|-------|
-| Android | ✅ Fully Supported | Native rendering |
-| iOS | ✅ Fully Supported | Native rendering |
-| Web | ✅ Fully Supported | Runs in browser |
-| Windows | ✅ Fully Supported | Desktop app |
-| macOS | ✅ Fully Supported | Desktop app |
-| Linux | ✅ Fully Supported | Desktop app |
+| Android | ✅ Fully Supported | Native rendering, optimized for mobile |
+| iOS | ✅ Fully Supported | Native rendering, optimized for mobile |
+
+**Note**: This app is designed specifically for mobile devices. Web, Windows, macOS, and Linux platforms are not supported.
 
 ---
 
@@ -388,7 +384,7 @@ in the Software without restriction...
 - **AI Model**: DeepSeek R1
 - **Rendering**: Native Flutter Custom Painters
 - **Minimum Flutter Version**: 3.0.0
-- **Platform Support**: 6 platforms (Android, iOS, Web, Windows, macOS, Linux)
+- **Platform Support**: Android & iOS (Mobile-first design)
 
 ---
 

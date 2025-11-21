@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flowchart_designer/services/openrouter_service.dart';
-import 'package:flowchart_designer/widgets/graph_flowchart_viewer.dart';
-import 'package:flowchart_designer/widgets/loading_screen.dart';
+import 'package:flowify/services/openrouter_service.dart';
+import 'package:flowify/widgets/graph_flowchart_viewer.dart';
+import 'package:flowify/widgets/loading_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flowchart Designer',
+      title: 'Flowify',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4A90E2)),
         useMaterial3: true,

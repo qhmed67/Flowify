@@ -101,26 +101,10 @@ ENV/
 lib/config/api_config.dart
 **/local.properties
 
-# Web related
-/web/*.js
-/web/*.js.map
-/web/.dart_tool/
-
-# macOS
+# macOS (keeping for iOS development on macOS)
 .DS_Store
 .AppleDouble
 .LSOverride
-**/macos/.symlinks/
-**/macos/Flutter/ephemeral
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-
-# Linux
-*~
 
 # VS Code
 .vscode/

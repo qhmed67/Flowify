@@ -332,8 +332,8 @@ Output ONLY valid JSON. NO markdown. NO explanation. Just the JSON object.
       final headers = {
         'Authorization': 'Bearer ${ApiConfig.openRouterApiKey}',
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://flowchar-designer.app',
-        'X-Title': 'FlowcharDesigner',
+        'HTTP-Referer': 'https://flowify.app',
+        'X-Title': 'Flowify',
       };
 
       final payload = {
