@@ -368,7 +368,7 @@ in the Software without restriction...
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **DeepSeek AI** for powerful reasoning capabilities
 - **OpenRouter** for seamless API access
